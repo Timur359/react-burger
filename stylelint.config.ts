@@ -1,4 +1,4 @@
-import type { Config } from "stylelint";
+import type { Config } from 'stylelint';
 
 const config: Config = {
   extends: ['stylelint-config-standard'],
@@ -287,7 +287,7 @@ const config: Config = {
     ],
     'selector-attribute-quotes': 'always',
     'selector-class-pattern':
-      '^[a-z][a-zA-Z0-9]*(-[a-zA-Z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(_[a-z0-9]+(-[a-z0-9]+)*)?(_[a-z0-9]+(-[a-z0-9]+)*)?$',
+      '^[a-z][a-zA-Z0-9]*(-[a-zA-Z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(_[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?$',
   },
 };
 

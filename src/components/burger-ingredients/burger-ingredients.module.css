@@ -1,6 +1,7 @@
 .burger_ingredients {
   display: flex;
   flex-direction: column;
+  width: 100%;
   max-width: 600px;
   color: var(--text-primary-color);
   font-family: 'Jet Brains Mono', serif;
@@ -8,8 +9,49 @@
 
 .menu {
   display: flex;
-  margin: 0;
+  flex-shrink: 0;
+  margin: 0 0 40px;
   padding: 0;
   text-align: center;
   list-style-type: none;
+}
+
+.ingredients_scroll {
+  max-height: calc(100vh - 268px);
+  padding-right: 8px;
+  overflow-y: auto;
+}
+
+.ingredients_scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ingredients_scroll::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+
+.ingredients_scroll::-webkit-scrollbar-thumb {
+  min-height: 50px;
+  background: #8585ad;
+  border-radius: 4px;
+}
+
+.cards_grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px 40px;
+}
+
+@media (width <= 1024px) {
+  .ingredients_scroll {
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+@media (width <= 600px) {
+  .cards_grid {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
 }

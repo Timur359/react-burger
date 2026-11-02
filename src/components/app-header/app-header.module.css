@@ -10,10 +10,14 @@
   margin: 0 auto;
 }
 
+/* stylelint-disable selector-class-pattern */
+
 .menu_part_left {
   display: flex;
   flex-basis: 35%;
 }
+
+/* stylelint-enable selector-class-pattern */
 
 .link {
   display: flex;
@@ -25,11 +29,15 @@
   color: var(--text-primary-color);
 }
 
+/* stylelint-disable selector-class-pattern */
+
 .link_position_last {
   display: flex;
   flex-basis: 35%;
   justify-content: flex-end;
 }
+
+/* stylelint-enable selector-class-pattern */
 
 .logo {
   display: flex;

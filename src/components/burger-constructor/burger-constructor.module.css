@@ -1,7 +1,103 @@
 .burger_constructor {
   display: flex;
   flex-direction: column;
-  width: 600px;
-  padding-bottom: 20px;
-  color: var(--text-primary-color);
+  width: 100%;
+  max-width: 600px;
+  margin-top: 48px; /* Выравниваем по уровню табов слева */
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  /* 
+   * 100vh - 88px (хедер) - 48px (отступ сверху) - 100px (кнопка с ценой) - 40px (запас) 
+   */
+  max-height: calc(100vh - 276px);
+  padding-right: 8px;
+  overflow-y: auto;
+}
+
+.list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.list::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+
+.list::-webkit-scrollbar-thumb {
+  min-height: 50px;
+  background: #8585ad;
+  border-radius: 4px;
+}
+
+.bun_wrapper {
+  padding-left: 32px;
+}
+
+.fillings {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.item_wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.drag_icon {
+  cursor: grab;
+}
+
+.empty_bun,
+.empty_ingredients {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80px;
+  padding: 16px;
+  color: var(--text-inactive-color);
+  text-align: center;
+  background: var(--background-element);
+  border-radius: 40px;
+}
+
+.empty_ingredients {
+  flex-direction: column;
+  min-height: 150px;
+}
+
+.order_info {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 40px;
+  margin-top: 40px;
+  padding-right: 16px;
+}
+
+.total_price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (width <= 1024px) {
+  .burger_constructor {
+    margin-top: 0;
+  }
+
+  .list {
+    max-height: 400px;
+  }
+
+  .order_info {
+    justify-content: center;
+    padding-right: 0;
+  }
 }
