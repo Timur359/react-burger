@@ -2,6 +2,8 @@ import { useOrderModal } from '@/contexts';
 import { CloseIcon } from '@krgaa/react-developer-burger-ui-components';
 import { createPortal } from 'react-dom';
 
+import doneImage from '../../assets/images/done.png';
+
 import styles from './order-details.module.css';
 
 export const OrderDetails = (): React.JSX.Element => {
@@ -18,13 +20,7 @@ export const OrderDetails = (): React.JSX.Element => {
           <p className={`text text_type_digits-large ${styles.order_number}`}>{orderNumber}</p>
           <p className="text text_type_main-medium mt-8 mb-10">идентификатор заказа</p>
 
-          <img
-            src="/assets/done.png"
-            alt="Логотип"
-            width="120"
-            height="120"
-            className="mt-5 mb-10"
-          />
+          <img src={doneImage} alt="Логотип" width="120" height="120" className="mt-5 mb-10" />
 
           <p className="text text_type_main-default mt-5">Ваш заказ начали готовить</p>
           <p className="text text_type_main-default text_color_inactive mt-2">
