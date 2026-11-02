@@ -46,7 +46,7 @@ export const App = (): React.JSX.Element => {
       </h1>
       <main className={`${styles.main} pl-5 pr-5`}>
         {isLoading ? (
-          <div className={styles.preloader_wrapper}>
+          <div className={`${styles.preloader_wrapper}`}>
             <Preloader />
           </div>
         ) : hasError ? (
