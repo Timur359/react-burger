@@ -8,6 +8,7 @@ import { BurgerConstructor } from '@components/burger-constructor/burger-constru
 import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredients';
 
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
+import { Modal } from '../modal/modal';
 import { OrderDetails } from '../order-details/order-details';
 
 import styles from './app.module.css';
@@ -17,8 +18,8 @@ export const App = (): React.JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [hasError, setHasError] = useState<boolean>(false);
 
-  const { selectedIngredient } = useIngredientsModal();
-  const { isOrderModalOpen } = useOrderModal();
+  const { selectedIngredient, closeModal } = useIngredientsModal();
+  const { isOrderModalOpen, closeOrderModal } = useOrderModal();
 
   useEffect(() => {
     const fetchIngredients = async (): Promise<void> => {
@@ -60,8 +61,16 @@ export const App = (): React.JSX.Element => {
           </>
         )}
 
-        {isOrderModalOpen && <OrderDetails />}
-        {selectedIngredient && <IngredientDetails />}
+        {isOrderModalOpen && (
+          <Modal onClose={closeOrderModal}>
+            <OrderDetails />
+          </Modal>
+        )}
+        {selectedIngredient && (
+          <Modal title="Детали ингредиента" onClose={closeModal}>
+            <IngredientDetails />
+          </Modal>
+        )}
       </main>
     </div>
   );
