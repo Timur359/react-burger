@@ -11,7 +11,7 @@ export const AppHeader = (): React.JSX.Element => {
   return (
     <header className={styles.header}>
       <nav className={`${styles.menu} p-4`}>
-        <div className={styles.menu_part_left}>
+        <div className={styles.menu_part_left} onChange={(e) => console.log(e)}>
           {/* Тут должны быть ссылки, а не например кнопки или абзацы */}
           <a href="/" className={`${styles.link} ${styles.link_active}`}>
             <BurgerIcon type="primary" />

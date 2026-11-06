@@ -1,3 +1,6 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from "eslint-plugin-storybook";
+
 import js from '@eslint/js';
 import { defineConfig } from 'eslint/config';
 import cssModulesPlugin from 'eslint-plugin-css-modules';
@@ -55,6 +58,12 @@ export default defineConfig(
       'unused-imports': unusedImports,
     },
     rules: {
+      'prettier/prettier': [
+    'error',
+    {
+      endOfLine: 'auto',
+    },
+  ],
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
       '@typescript-eslint/consistent-type-imports': [
         'error',

@@ -1,7 +1,99 @@
 .burger_constructor {
   display: flex;
   flex-direction: column;
-  width: 600px;
-  padding-bottom: 20px;
-  color: var(--text-primary-color);
+  width: 100%;
+  max-width: 600px;
+  height: calc(100vh - 208px);
+}
+
+.bun_wrapper {
+  flex-shrink: 0;
+  padding-left: 46px;
+}
+
+.fillings_scroll {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 0;
+  padding: 16px 8px 16px 0;
+  overflow-y: auto;
+}
+
+.fillings_scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.fillings_scroll::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+
+.fillings_scroll::-webkit-scrollbar-thumb {
+  min-height: 50px;
+  background: #8585ad;
+  border-radius: 4px;
+}
+
+.item_wrapper {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.drag_icon {
+  cursor: grab;
+}
+
+.empty_bun,
+.empty_ingredients {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  min-height: 80px;
+  padding: 16px;
+  color: var(--text-inactive-color);
+  text-align: center;
+  background: var(--background-element);
+  border-radius: 40px;
+}
+
+.empty_ingredients {
+  flex-direction: column;
+  min-height: 150px;
+}
+
+.order_info {
+  display: flex;
+  flex-shrink: 0; /* Кнопка не сжимается */
+  justify-content: flex-end;
+  align-items: center;
+  gap: 40px;
+  margin-top: 40px;
+  padding-right: 16px;
+}
+
+.total_price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (width <= 1024px) {
+  .burger_constructor {
+    height: auto;
+    margin-top: 0;
+  }
+
+  .fillings_scroll {
+    max-height: 400px;
+  }
+
+  .order_info {
+    justify-content: center;
+    padding-right: 0;
+  }
 }
