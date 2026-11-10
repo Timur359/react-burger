@@ -1,23 +1,40 @@
-import { useIngredientsModal } from '@/contexts';
 import { Counter, CurrencyIcon } from '@krgaa/react-developer-burger-ui-components';
+import { useDrag } from 'react-dnd';
 
-import type { TIngredient } from '@/utils';
+import type { TIngredient } from '@utils/types';
 
 import styles from './ingredient-item.module.css';
 
 type TIngredientItemProps = {
   ingredient: TIngredient;
-  count?: number;
+  count: number;
+  onClick: () => void;
+};
+
+type TDragCollectedProps = {
+  isDragging: boolean;
 };
 
 export const IngredientItem = ({
   ingredient,
-  count = 0,
+  count,
+  onClick,
 }: TIngredientItemProps): React.JSX.Element => {
-  const { openIngredientsModal } = useIngredientsModal();
+  const [{ isDragging }, dragRef] = useDrag<TIngredient, unknown, TDragCollectedProps>({
+    type: 'ingredient',
+    item: ingredient,
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
 
   return (
-    <div className={styles.card} onClick={() => openIngredientsModal(ingredient)}>
+    <div
+      ref={dragRef}
+      className={styles.card}
+      style={{ opacity: isDragging ? 0.5 : 1 }}
+      onClick={onClick}
+    >
       {count > 0 && (
         <div className={styles.counter}>
           <Counter count={count} size="default" />

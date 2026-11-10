@@ -1,19 +1,21 @@
 export type TIngredient = {
   _id: string;
   name: string;
-  type: string;
+  type: 'bun' | 'main' | 'sauce';
   proteins: number;
   fat: number;
   carbohydrates: number;
   calories: number;
   price: number;
   image: string;
-  image_large: string;
   image_mobile: string;
+  image_large: string;
   __v: number;
+  uniqueId?: string;
 };
 
-export type TIngredientsResponse = {
+export type TOrderResponse = {
   success: boolean;
-  data: TIngredient[];
+  name: string;
+  order: { number: number };
 };

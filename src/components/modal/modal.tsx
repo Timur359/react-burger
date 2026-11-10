@@ -13,7 +13,6 @@ type TModalProps = {
 };
 
 export const Modal = ({ title, onClose, children }: TModalProps): JSX.Element => {
-  // Закрытие по Escape
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent): void => {
       if (e.key === 'Escape') {
@@ -22,7 +21,6 @@ export const Modal = ({ title, onClose, children }: TModalProps): JSX.Element =>
     };
 
     document.addEventListener('keydown', handleEscape);
-    // Блокируем скролл страницы, пока открыта модалка
     document.body.style.overflow = 'hidden';
 
     return (): void => {
@@ -31,7 +29,6 @@ export const Modal = ({ title, onClose, children }: TModalProps): JSX.Element =>
     };
   }, [onClose]);
 
-  // Ищем портал в index.html
   const modalRoot = document.getElementById('modals');
   if (!modalRoot) return <></>;
 
@@ -40,7 +37,6 @@ export const Modal = ({ title, onClose, children }: TModalProps): JSX.Element =>
       <ModalOverlay onClick={onClose} />
       <div className={styles.modal}>
         <div className={styles.header}>
-          {/* Показываем заголовок только если он передан */}
           {title && <h2 className={`text text_type_main-large ${styles.title}`}>{title}</h2>}
           <button className={styles.close_button} onClick={onClose} type="button">
             <CloseIcon type="primary" />
