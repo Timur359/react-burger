@@ -1,10 +1,14 @@
 import { Tab } from '@krgaa/react-developer-burger-ui-components';
 import { useMemo, useRef, useState } from 'react';
 
+import { useAppDispatch, useAppSelector } from '@services/hooks';
+import { selectCounters } from '@services/selectors';
+import { setSelectedIngredient } from '@services/slices/ingredients-slice';
+
 import { TAB_LIST } from './constants';
 import { IngredientItem } from './ingridient-item';
 
-import type { TIngredient } from '@/utils';
+import type { TIngredient } from '@utils/types';
 
 import styles from './burger-ingredients.module.css';
 
@@ -13,20 +17,9 @@ type TBurgerIngredientsProps = {
 };
 
 export const BurgerIngredients = ({ ingredients }: TBurgerIngredientsProps): React.JSX.Element => {
-  const [activeTab, setActiveTab] = useState(TAB_LIST.BUN);
-
-  const onChangeActiveTab = (tab: string): void => {
-    setActiveTab(tab);
-    const refs = {
-      [TAB_LIST.BUN]: bunsRef,
-      [TAB_LIST.SAUCE]: saucesRef,
-      [TAB_LIST.MAIN]: mainsRef,
-    };
-    const targetRef = refs[tab as keyof typeof refs];
-    if (targetRef?.current) {
-      targetRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  const [activeTab, setActiveTab] = useState<string>(TAB_LIST.BUN);
+  const dispatch = useAppDispatch();
+  const counters = useAppSelector(selectCounters);
 
   const bunsRef = useRef<HTMLHeadingElement>(null);
   const saucesRef = useRef<HTMLHeadingElement>(null);
@@ -40,6 +33,23 @@ export const BurgerIngredients = ({ ingredients }: TBurgerIngredientsProps): Rea
       [TAB_LIST.SAUCE]: ingredients.filter((item) => item.type === 'sauce'),
     };
   }, [ingredients]);
+
+  const onChangeActiveTab = (tab: string): void => {
+    setActiveTab(tab);
+
+    const refs = {
+      [TAB_LIST.BUN]: bunsRef,
+      [TAB_LIST.SAUCE]: saucesRef,
+      [TAB_LIST.MAIN]: mainsRef,
+    };
+    const targetRef = refs[tab as keyof typeof refs];
+    if (targetRef?.current && scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({
+        top: targetRef.current.offsetTop - scrollContainerRef.current.offsetTop,
+        behavior: 'smooth',
+      });
+    }
+  };
 
   const handleScroll = (): void => {
     if (!scrollContainerRef.current) return;
@@ -60,6 +70,10 @@ export const BurgerIngredients = ({ ingredients }: TBurgerIngredientsProps): Rea
     if (closest.tab !== activeTab) {
       setActiveTab(closest.tab);
     }
+  };
+
+  const handleIngredientClick = (ingredient: TIngredient): void => {
+    dispatch(setSelectedIngredient(ingredient));
   };
 
   return (
@@ -85,6 +99,7 @@ export const BurgerIngredients = ({ ingredients }: TBurgerIngredientsProps): Rea
           </Tab>
         </ul>
       </nav>
+
       <div
         className={`${styles.ingredients_scroll} custom-scroll`}
         ref={scrollContainerRef}
@@ -95,7 +110,12 @@ export const BurgerIngredients = ({ ingredients }: TBurgerIngredientsProps): Rea
         </h2>
         <div className={styles.cards_grid}>
           {groupedIngredients[TAB_LIST.BUN].map((item) => (
-            <IngredientItem key={item._id} ingredient={item} />
+            <IngredientItem
+              key={item._id}
+              ingredient={item}
+              count={counters[item._id] || 0}
+              onClick={() => handleIngredientClick(item)}
+            />
           ))}
         </div>
 
@@ -104,7 +124,12 @@ export const BurgerIngredients = ({ ingredients }: TBurgerIngredientsProps): Rea
         </h2>
         <div className={styles.cards_grid}>
           {groupedIngredients[TAB_LIST.MAIN].map((item) => (
-            <IngredientItem key={item._id} ingredient={item} />
+            <IngredientItem
+              key={item._id}
+              ingredient={item}
+              count={counters[item._id] || 0}
+              onClick={() => handleIngredientClick(item)}
+            />
           ))}
         </div>
 
@@ -113,7 +138,12 @@ export const BurgerIngredients = ({ ingredients }: TBurgerIngredientsProps): Rea
         </h2>
         <div className={styles.cards_grid}>
           {groupedIngredients[TAB_LIST.SAUCE].map((item) => (
-            <IngredientItem key={item._id} ingredient={item} />
+            <IngredientItem
+              key={item._id}
+              ingredient={item}
+              count={counters[item._id] || 0}
+              onClick={() => handleIngredientClick(item)}
+            />
           ))}
         </div>
       </div>

@@ -1,31 +1,55 @@
-import { useOrderModal } from '@/contexts';
 import {
   Button,
   ConstructorElement,
   CurrencyIcon,
-  DragIcon,
 } from '@krgaa/react-developer-burger-ui-components';
+import { useCallback } from 'react';
+import { useDrop } from 'react-dnd';
 
-import type { TIngredient } from '@/utils';
+import { useAppDispatch, useAppSelector } from '@services/hooks';
+import { selectTotalPrice } from '@services/selectors';
+import { addIngredient } from '@services/slices/constructor-slice';
+import { sendOrder } from '@services/slices/order-slice';
+
+import { ConstructorItem } from './constructor-item';
+
+import type { TIngredient } from '@utils/types';
 
 import styles from './burger-constructor.module.css';
 
-type TBurgerConstructorProps = {
-  ingredients: TIngredient[];
+type TDropCollectedProps = {
+  isHover: boolean;
 };
 
-export const BurgerConstructor = ({ ingredients }: TBurgerConstructorProps): React.JSX.Element => {
-  const { openOrderModal } = useOrderModal();
+export const BurgerConstructor = (): React.JSX.Element => {
+  const dispatch = useAppDispatch();
+  const { bun, ingredients } = useAppSelector((state) => state.burgerConstructor);
+  const totalPrice = useAppSelector(selectTotalPrice);
+  const { isLoading } = useAppSelector((state) => state.order);
 
-  const bun = ingredients.find((item) => item.type === 'bun') ?? null;
-  const fillings = ingredients.filter((item) => item.type !== 'bun');
+  const [{ isHover }, dropTarget] = useDrop<TIngredient, unknown, TDropCollectedProps>({
+    accept: 'ingredient',
+    drop(item) {
+      dispatch(addIngredient(item));
+    },
+    collect: (monitor) => ({
+      isHover: monitor.isOver(),
+    }),
+  });
 
-  const totalPrice =
-    (bun ? bun.price * 2 : 0) + fillings.reduce((sum, item) => sum + item.price, 0);
+  const handleOrder = useCallback((): void => {
+    if (!bun) return;
+
+    const ids = [bun._id, ...ingredients.map((i) => i._id), bun._id];
+
+    void dispatch(sendOrder(ids));
+  }, [bun, ingredients, dispatch]);
 
   return (
-    <section className={styles.burger_constructor}>
-      {/* Верхняя булка — зафиксирована */}
+    <section
+      ref={dropTarget}
+      className={`${styles.burger_constructor} ${isHover ? styles.hover : ''}`}
+    >
       {bun ? (
         <div className={styles.bun_wrapper}>
           <ConstructorElement
@@ -40,16 +64,10 @@ export const BurgerConstructor = ({ ingredients }: TBurgerConstructorProps): Rea
         <div className={`${styles.empty_bun} text text_type_main-default`}>Выберите булку</div>
       )}
 
-      {/* Скроллируемая зона с начинками */}
       <div className={`${styles.fillings_scroll} custom-scroll`}>
-        {fillings.length > 0 ? (
-          fillings.map((item, index) => (
-            <div key={`${item._id}-${index}`} className={styles.item_wrapper}>
-              <div className={styles.drag_icon}>
-                <DragIcon type="primary" />
-              </div>
-              <ConstructorElement text={item.name} price={item.price} thumbnail={item.image} />
-            </div>
+        {ingredients.length > 0 ? (
+          ingredients.map((item, index) => (
+            <ConstructorItem key={item.uniqueId} ingredient={item} index={index} />
           ))
         ) : (
           <div className={`${styles.empty_ingredients} text text_type_main-default`}>
@@ -59,7 +77,6 @@ export const BurgerConstructor = ({ ingredients }: TBurgerConstructorProps): Rea
         )}
       </div>
 
-      {/* Нижняя булка — зафиксирована */}
       {bun ? (
         <div className={styles.bun_wrapper}>
           <ConstructorElement
@@ -74,7 +91,6 @@ export const BurgerConstructor = ({ ingredients }: TBurgerConstructorProps): Rea
         <div className={`${styles.empty_bun} text text_type_main-default`}>Выберите булку</div>
       )}
 
-      {/* Итоговая сумма и кнопка */}
       <div className={styles.order_info}>
         <div className={styles.total_price}>
           <span className="text text_type_digits-medium">{totalPrice}</span>
@@ -84,10 +100,10 @@ export const BurgerConstructor = ({ ingredients }: TBurgerConstructorProps): Rea
           htmlType="button"
           type="primary"
           size="large"
-          disabled={!bun || fillings.length === 0}
-          onClick={openOrderModal}
+          disabled={!bun || ingredients.length === 0 || isLoading}
+          onClick={handleOrder}
         >
-          Оформить заказ
+          {isLoading ? 'Загрузка...' : 'Оформить заказ'}
         </Button>
       </div>
     </section>

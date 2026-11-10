@@ -1,14 +1,12 @@
-import { useOrderModal } from '@/contexts';
-
-import doneImage from '../../assets/images/done.png';
+import doneImage from '@/assets/images/done.png';
 
 import styles from './order-details.module.css';
 
-export const OrderDetails = (): React.JSX.Element => {
-  const { orderNumber } = useOrderModal();
+type TOrderDetailsProps = {
+  orderNumber: string;
+};
 
-  if (!orderNumber) return <></>;
-
+export const OrderDetails = ({ orderNumber }: TOrderDetailsProps): React.JSX.Element => {
   return (
     <div className={styles.content}>
       <p className={`text text_type_digits-large ${styles.order_number}`}>{orderNumber}</p>
